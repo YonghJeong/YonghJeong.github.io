@@ -1,629 +1,70 @@
-* {
-    margin: 0;
-    padding: 0;
+$background-image: linear-gradient(to left, #B0DAB9, #DAD299);
+$arc-delay: 0.1s;
+$band-width: 35px;
+$colors: (
+  darkorange: #FF8C00,
+  orange: #FFA500,
+  orangered: #FF4500,
+  darkblue: #000033 ,
+  blue: #000099,
+  skyblue: #87ceeb,
+  transparent: $background-image
+);
+
+@mixin arc-calc($color, $diameter) {
+  $half: $diameter/2;
+  background: $color;
+  clip: rect(0 $diameter $half 0);
+  height: $diameter;
+  margin-left: -$half;
+  margin-top: -$half;
+  width: $diameter;
 }
 
-html,
+@keyframes spin {
+  from {
+    transform: rotateZ(-180deg);
+  }
+  
+  to {
+    transform: rotateZ(0deg);
+  }
+}
+
 body {
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    overflow-x: hidden;
-    font-family: 'Arvo', serif;
-    font-size: 100%;
+  background: $background-image;
 }
 
-canvas {
-    position: fixed;
-    z-index: -1;
-    top: 0px;
-    width: 100%;
-    margin-left: 0px;
-    height: 100%;
-    display: block;
+$rainbow-diameter: $band-width * length($colors) * 2;
+$rainbow-half: $rainbow-diameter / 2;
+.rainbow {
+  clip: rect(0 $rainbow-diameter $rainbow-half 0);
+  height: $rainbow-diameter;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateX(-50%) translateY(-25%);
+  width: $rainbow-diameter;
 }
 
-#wrap {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-/* 영상영역 */
-
-#wrap .section {
-    height: 100%;
-    overflow: hidden;
-    position: relative;
+.arc {
+  animation: spin ease-in-out 0.5s normal both;
+  border-radius: 50%;
+  left: 50%;
+  position: absolute;
+  top: 50%;
 }
 
-#container {
-    height: 100%;
-}
-
-#wrap .content {
-    height: 100%;
-}
-
-#wrap .content .left {
-    float: left;
-    width: 50%;
-    height: 100%;
-    position: relative;
-    /*    background-color: rgb(255, 255, 255);*/
-}
-
-#wrap .fronttext {
-    opacity: 1;
-    width: 100%;
-    position: relative;
-    height: 100%;
-}
-
-#wrap .firsttext {
-    opacity: 1;
-    width: 100%;
-    height: 33.3%;
-    position: relative;
-    display: table;
-}
-
-#wrap .secondtext {
-    opacity: 1;
-    width: 100%;
-    height: 33.3%;
-    position: relative;
-    display: table;
-}
-
-#wrap .thirdtext {
-    opacity: 1;
-    width: 100%;
-    height: 33.3%;
-    position: relative;
-    display: table;
-}
-
-#wrap .firsttext span {
-    display: table-cell;
-    vertical-align: middle;
-    font-weight: bold;
-    text-align: center;
-    color: azure;
-    position: relative;
-    height: 100%;
-    transition: 1s all;
-}
-
-#wrap .firsttext p {
-    font-size: 300%;
-    height: 100%;
-    text-align: center;
-    background-color: #FF0000;
-}
-
-#wrap .secondtext span {
-    display: table-cell;
-    vertical-align: middle;
-    position: relative;
-    text-align: center;
-    font-weight: bold;
-    text-align: center;
-    color: azure;
-    transition: 1s all;
-}
-
-#wrap .secondtext p {
-    font-size: 300%;
-    height: 100%;
-    text-align: center;
-    background-color: #1485CC;
-}
-
-#wrap .thirdtext span {
-    text-align: center;
-    display: table-cell;
-    vertical-align: middle;
-    position: relative;
-    font-weight: bold;
-    text-align: center;
-    color: azure;
-    transition: 1s all;
-}
-
-#wrap .thirdtext p {
-    font-size: 300%;
-    text-align: center;
-    height: 100%;
-    background-color: #0971B2;
-}
-/* 설명영역 */
-
-#wrap .content .center {
-    float: left;
-    width: 50%;
-    height: 100%;
-    text-align: justify;
-    transition: 1s all;
-    /*    background-color: rgb(255, 255, 255);*/
-}
-
-#wrap .content .center .discription {
-    position: relative;
-    padding-bottom: 0px;
-    padding-top: 0px;
-    padding-left: 100px;
-    padding-right: 100px;
-}
-
-#wrap .content .center .title {
-    position: relative;
-    padding-bottom: 0px;
-    padding-top: 200px;
-    padding-left: 100px;
-    padding-right: 100px;
-}
-
-#wrap .content .center .title p {
-    color: rgb(0, 0, 0);
-    font-style: normal;
-    font-size: 1.3em;
-    line-height: 2em;
-    background-color: rgb(255, 255, 0);
-    display: inline;
-    font-weight: bold;
-}
-
-#wrap .content .center .discription p {
-    color: rgb(0, 0, 0);
-    font-style: normal;
-    font-size: 0.8em;
-    line-height: 2em;
-    background-color: rgb(255, 255, 0);
-    display: inline;
-}
-
-#wrap .content .center .discription .link p1 {
-    color: rgb(0, 0, 0);
-    font-style: oblique;
-    font-size: 0.8em;
-    line-height: 3em;
-    background-color: rgb(255, 255, 255);
-    display: inline;
-}
-
-#wrap .content .center .discription .link a {
-    color: rgb(255, 255, 255);
-}
-
-#wrap.open .section {
-    opacity: 0.4;
-    transition: 1s all;
-}
-
-#wrap.open .right {
-    width: 120px;
-    height: 100%;
-    position: absolute;
-}
-
-#wrap .right .menuicon {
-    position: absolute;
-    right: -45%;
-    padding-top: 20px;
-    padding-right: 20px;
-}
-
-#wrap .right {
-    position: fixed;
-    right:0;
-    top: 0;
-    width: 0%;
-    height: 100%;
-    transition: 1.3s all;
-}
-
-div.img {
-    position: relative;
-    width: 67%;
-    padding-bottom: 100%;
-}
-
-div.img > div {
-    position: relative;
-    padding-bottom: 0px;
-    padding-top: 200px;
-    padding-left: 100px;
-    padding-right: 0px;
-}
-
-div.img > div,
-iframe {
-    width: 100%;
-    height: 65%;
-}
-
-#wrap .left img {
-    vertical-align: top;
-}
-
-.right .btn-cont {
-    text-align: center;
-    margin-top: 100px;
-    margin-top: 100px;
-}
-
-.btn-cont .btn {
-    position: relative;
-    padding: 5px 10px;
-    border: 1px solid #FF2676;
-    color: black;
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 0.8em;
-    font-family: 'Open Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    -webkit-font-smoothing: antialiased;
-}
-.btn-cont .btn span{
-    color:#FF2676;
-}
-.btn-cont .btn:hover {
-    border: none;
-}
-
-.btn-cont .btn:hover .line-1 {
-    -webkit-animation: move1 1500ms infinite ease;
-    animation: move1 1500ms infinite ease;
-}
-
-.btn-cont .btn:hover .line-2 {
-    -webkit-animation: move2 1500ms infinite ease;
-    animation: move2 1500ms infinite ease;
-}
-
-.btn-cont .btn:hover .line-3 {
-    -webkit-animation: move3 1500ms infinite ease;
-    animation: move3 1500ms infinite ease;
-}
-
-.btn-cont .btn:hover .line-4 {
-    -webkit-animation: move4 1500ms infinite ease;
-    animation: move4 1500ms infinite ease;
-}
-
-.btn-cont .line-1 {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 1px;
-    background-color: #000000;
-    left: 0;
-    bottom: 0;
-}
-
-.btn-cont .line-2 {
-    content: "";
-    display: block;
-    position: absolute;
-    height: 1px;
-    background-color: #000000;
-    left: 0;
-    top: 0;
-}
-
-.btn-cont .line-3 {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 1px;
-    background-color: #000000;
-    right: 0;
-    top: 0;
-}
-
-.btn-cont .line-4 {
-    content: "";
-    display: block;
-    position: absolute;
-    height: 1px;
-    background-color: #000000;
-    right: 0;
-    bottom: 0;
-}
-
-@-webkit-keyframes move1 {
-    0% {
-        height: 100%;
-        bottom: 0;
-    }
-    54% {
-        height: 0;
-        bottom: 100%;
-    }
-    55% {
-        height: 0;
-        bottom: 0;
-    }
-    100% {
-        height: 100%;
-        bottom: 0;
-    }
-}
-
-@keyframes move1 {
-    0% {
-        height: 100%;
-        bottom: 0;
-    }
-    54% {
-        height: 0;
-        bottom: 100%;
-    }
-    55% {
-        height: 0;
-        bottom: 0;
-    }
-    100% {
-        height: 100%;
-        bottom: 0;
-    }
-}
-
-@-webkit-keyframes move2 {
-    0% {
-        width: 0;
-        left: 0;
-    }
-    50% {
-        width: 100%;
-        left: 0;
-    }
-    100% {
-        width: 0;
-        left: 100%;
-    }
-}
-
-@keyframes move2 {
-    0% {
-        width: 0;
-        left: 0;
-    }
-    50% {
-        width: 100%;
-        left: 0;
-    }
-    100% {
-        width: 0;
-        left: 100%;
-    }
-}
-
-@-webkit-keyframes move3 {
-    0% {
-        height: 100%;
-        top: 0;
-    }
-    54% {
-        height: 0;
-        top: 100%;
-    }
-    55% {
-        height: 0;
-        top: 0;
-    }
-    100% {
-        height: 100%;
-        top: 0;
-    }
-}
-
-@keyframes move3 {
-    0% {
-        height: 100%;
-        top: 0;
-    }
-    54% {
-        height: 0;
-        top: 100%;
-    }
-    55% {
-        height: 0;
-        top: 0;
-    }
-    100% {
-        height: 100%;
-        top: 0;
-    }
-}
-
-@-webkit-keyframes move4 {
-    0% {
-        width: 0;
-        right: 0;
-    }
-    55% {
-        width: 100%;
-        right: 0;
-    }
-    100% {
-        width: 0;
-        right: 100%;
-    }
-}
-
-@keyframes move4 {
-    0% {
-        width: 0;
-        right: 0;
-    }
-    55% {
-        width: 100%;
-        right: 0;
-    }
-    100% {
-        width: 0;
-        right: 100%;
-    }
-}
-
-@media (max-width: 640px) and (min-width:320px){
-    #wrap .content .left {
-        width: 100%;
-        height: 50%;
-        float: none;
-    }
-    #wrap .content .center {
-        width: 100%;
-        height: 50%;
-        float: none;
-    }
-    #wrap .content .center .title {
-        padding-top: 0;
-        position: relative;
-        padding-bottom: 0px;
-        padding-left: 5%;
-        padding-right: 5%;
-    }
-    div.img {
-        padding-bottom: 0;
-        margin: 0 auto;
-        padding-top: 20%;
-        width: 100%;
-    }
-    div.img > div {
-        padding-top: 0;
-        padding-bottom: 0;
-        padding-left: 0;
-        text-align: center;
-        padding-left: 0;
-        height: 58%;
-    }
-    iframe {
-        width: auto;
-        height: 100%;
-    }
-    #wrap .content .center .discription {
-        padding-top: 3%;
-        position: relative;
-        padding-bottom: 10%;
-        padding-left: 5%;
-        padding-right: 5%;
-    }
-    #wrap {
-        height: 100%;
-    }
-    #wrap .fronttext {
-        width: 100%;
-        position: relative;
-        height: 100%;
-    }
-    #wrap .firsttext {
-        opacity: 1;
-        width: 100%;
-        height: 33.3%;
-        position: relative;
-        display: table;
-    }
-    #wrap .secondtext {
-        opacity: 1;
-        width: 100%;
-        height: 33.3%;
-        position: relative;
-        display: table;
-    }
-    #wrap .thirdtext {
-        opacity: 1;
-        width: 100%;
-        height: 33.3%;
-        position: relative;
-        display: table;
-    }
-    #wrap .firsttext span {
-        display: table-cell;
-        vertical-align: middle;
-        font-weight: bold;
-        text-align: center;
-        color: azure;
-        position: relative;
-        transition: 1s all;
-    }
-    #wrap .firsttext p {
-        font-size: 100%;
-        height: 100%;
-        text-align: center;
-        background-color: #FF0000;
-    }
-    #wrap .secondtext span {
-        display: table-cell;
-        vertical-align: middle;
-        position: relative;
-        text-align: center;
-        font-weight: bold;
-        text-align: center;
-        color: azure;
-        transition: 1s all;
-    }
-    #wrap .secondtext p {
-        font-size: 100%;
-        height: 100%;
-        text-align: center;
-        background-color: #1485CC;
-    }
-    #wrap .thirdtext span {
-        text-align: center;
-        display: table-cell;
-        vertical-align: middle;
-        position: relative;
-        font-weight: bold;
-        text-align: center;
-        color: azure;
-        transition: 1s all;
-    }
-    #wrap .thirdtext p {
-        font-size: 100%;
-        text-align: center;
-        height: 100%;
-        background-color: #0971B2;
-    }
-}
-/*
-@media (max-width:600px) {
-  #wrap .left, #wrap .right {
-    float:none;
-    width:100%;
-  }
-  #wrap .img p {
-    transform:translate(0, 0);
+@for $i from 1 through length($colors) {
+  $set: nth($colors, $i);
+  $color: nth($set, 1);
+  $hex: nth($set, 2);
+  
+  $delay: (length($colors) - $i) * $arc-delay;
+  $diameter: (length($colors) - $i + 1) * $band-width * 2;
+  
+  .arc-#{$color} {
+    @include arc-calc($hex, $diameter);
+    animation-delay: $delay;
   }
 }
-/*모바일과 pc 대응
-html,body{
-    height:100%;
-}
-#wrap{
-    width: 320px;
-}
-#wrap .menu{
-    float:left;
-    width: 300px;
-    height: 300px;
-    background:#111;
-}
-#wrap .content{
-    float:left;
-    width: 100px;
-    height: 100px;
-    background:#111;
-}
-/*모바일에서 원하는 넓이의 이미지를 보게 () 모바일화면 크기 조건 media query 해상도
-@media (max-width:640px) and (min-width:320px){
-    #wrap .menu {float: none; width:100%}/*부모의 영향을 받는다*아무것도 없을시 화면 사이즈에 따라서
-    #wrap .content {float: none; width:100%}
-}
-@media (min-width:800px){
-    #wrap .menu {float: none; width:100%}
-    #wrap .content {float: none; width:100%}
-}
-*/
